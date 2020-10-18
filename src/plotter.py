@@ -22,7 +22,9 @@ def get_axes(ys,n_rounds,logmsg=""):
     if "logxlogx" in logmsg:
         pass
     elif "logx" in logmsg:
-        X = np.round(np.logspace(1, 4, 50, base=10, endpoint=False)).astype(int)
+        X = np.round(np.logspace(1, 3, 50, base=10, endpoint=False)).astype(int)
+#        X = np.arange(10)
+        
     else:
         X = np.arange(n_rounds)
     

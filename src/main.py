@@ -8,7 +8,6 @@ Re-Implementation of experiments for ADVERSARIAL ATTACKS IN STOCHASTIC BANDITS
 #http://papers.nips.cc/paper/7622-adversarial-attacks-on-stochastic-bandits.pdf
 """
 
-
 """
 #############
 #EGREEDY EXPERIMENTS
@@ -26,6 +25,7 @@ def EG_experiment_1(params):
     data = []
     for mu in mus:
         means = np.array([mu, target_mu])
+        print(f"trying mu={mu}")
         data.append(run_bandit(params, means, sigmas**2))
         
     #data plotting info
@@ -62,13 +62,16 @@ def main():
     n_rounds = 10**4#5
     n_trials = 10**2#3
     target_arm = 1
+    n_jobs = 7
     
     params = {"n_arms":n_arms, "delta":delta, 
               "n_rounds":n_rounds, 
-              "n_trials":n_trials, "target":target_arm}
+              "n_trials":n_trials, "target":target_arm, 
+              "n_jobs": n_jobs}
               
     EG_experiment_1(params)
     
     #RUN UCB EXPERIMENTS
     
-main()
+if __name__ == '__main__':
+    main()
