@@ -5,13 +5,13 @@ Final Project for CS660. We reimplement experiments from
  (http://papers.nips.cc/paper/7622-adversarial-attacks-on-stochastic-bandits.pdf).
  
 ## Installation 
- '''bash
+ '''
  conda install ipython
  conda install numpy
  '''
 
 ## Usage
-'''python
+'''
 python -m main
 '''
 
