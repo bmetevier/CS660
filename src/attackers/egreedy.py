@@ -43,7 +43,7 @@ class EGreedyAttacker(MABAttacker):
             return reward            
     
     def _get_alpha(self, reward, bandit, sigma):
-        N_prev = bandit.n_arm_pulls[bandit.action]            
+        N_prev = bandit.n_arm_pulls[bandit.action]-1        
 #        N_prev = N_curr-1
         prev_reward_sum = bandit.means[bandit.action] * N_prev
         N_target = bandit.n_arm_pulls[self.target]
