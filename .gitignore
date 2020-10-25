@@ -126,7 +126,7 @@ venv.bak/
 dmypy.json
 
 # ignore results contents
-src/results/*
+src/experiments/results/*
 
 # Pyre type checker
 .pyre/
