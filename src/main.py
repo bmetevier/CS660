@@ -17,7 +17,8 @@ def EG_experiment_1(params):
     """Vary the mean of non-target arm."""
     
     #set up arm reward distributions
-    mus = np.array([1, 2, 5])
+#    mus = np.array([1, 2, 5])
+    mus = np.array([5])
     target_mu=0
     sigmas = 0.1*np.ones(params["n_arms"])
     

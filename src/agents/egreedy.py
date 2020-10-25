@@ -18,7 +18,7 @@ class EGreedy(Agent):
         if n_arms<2:
             raise ValueError("number of arms must be greater than 1")
             
-        self.round=1
+        self.round=0
         self._means = -np.inf * np.ones(n_arms) #start pessimistic
         self._action = None
         

@@ -43,16 +43,17 @@ class EGreedyAttacker(MABAttacker):
             return reward            
     
     def _get_alpha(self, reward, bandit, sigma):
-        N_curr = bandit.n_arm_pulls[bandit.action]            
-        N_prev = N_curr-1
+        N_prev = bandit.n_arm_pulls[bandit.action]            
+#        N_prev = N_curr-1
         prev_reward_sum = bandit.means[bandit.action] * N_prev
+        N_target = bandit.n_arm_pulls[self.target]
         
-        beta = self._get_beta(N_curr, sigma, bandit.n_arms)
-        curr_mean = (prev_reward_sum + reward)/N_curr
-        constraint = curr_mean - 2*beta
+        beta = self._get_beta(N_target, sigma, bandit.n_arms)
+#        curr_mean = (prev_reward_sum + reward)/N_curr
+#        constraint = curr_mean - 2*beta
 
         return (prev_reward_sum + reward - 
-                (bandit.means[bandit.action] - constraint*N_curr))
+                (bandit.means[self.target]-2*beta)*(N_prev+1))
         
     def _get_beta(self, N, sigma, n_arms):
         """
@@ -62,6 +63,6 @@ class EGreedyAttacker(MABAttacker):
             N (int): number of arm pulls of arm i up to round t
             sigma (float): stdev of reward distribution associated with arm i
         """
-        outer = (2*sigma**2)/N
+        outer = (2*sigma)/N
         inner = (np.pi**2)*(n_arms*N**2)/(3*self.delta)
         return np.sqrt(outer*np.log(inner))
