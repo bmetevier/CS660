@@ -23,10 +23,11 @@ def get_axes(ys, n_rounds, logmsg=""):
     elif "logx" in logmsg:
         X = np.log(X)
     
-    embed()
     if "logy" in logmsg:
         #first two indices are zero
         Ys = [np.log(y[2:]) for y in ys]
         X = X[2:]
+    else:
+        Ys = ys
 
     return X, Ys

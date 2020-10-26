@@ -17,11 +17,11 @@ class Environment(object):
             raise ValueError("invalid mean and variance arrays")
         
         self.means = means
-        self.vars = variances
+        self.stdevs = np.sqrt(variances)
     
     @property
     def n_actions(self):
         return self.means.size
     
     def get_reward(self, action):
-        return np.random.normal(self.means[action], self.vars[action])        
+        return np.random.normal(self.means[action], self.stdevs[action])        

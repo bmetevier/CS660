@@ -21,7 +21,7 @@ def main():
               "n_trials":n_trials, "target":target_arm, 
               "n_jobs": n_jobs}
               
-    EG_experiment_2(params)
+    EG_experiment_1(params)
     
     #RUN UCB EXPERIMENTS
     
