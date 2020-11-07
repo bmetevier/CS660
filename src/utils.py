@@ -16,15 +16,8 @@ def _run_bandit(n_trials, params, means, variances, data):
     """
     for trial in range(int(n_trials)):
         env = Environment(means, variances)
-        assert params["algo"] in {"egreedy", "UCB"}, "Incorrect algorithm name"
-        if params["algo"] == "egreedy":
-            bandit = EGreedy(params["n_arms"])
-            attacker = EGreedyAttacker(params["target"], params["delta"])
-        elif params["algo"] == "UCB":
-            bandit = UCB(params["n_arms"], variances)
-            attacker = UCBAttacker(params["target"], params["delta"], params["delta0"])
+        attacker, bandit = get_alice_and_bob(params, variances)
         attack_cost = 0
-        
         for r in range(params["n_rounds"]):
             initial_pull = r<params["n_arms"]
             if initial_pull: #pull each arm at least once
@@ -39,6 +32,16 @@ def _run_bandit(n_trials, params, means, variances, data):
             bandit.update_means(reward)
             
             data[r] += attack_cost
+
+def get_alice_and_bob(params, variances):
+    assert params["algo"] in {"egreedy", "UCB"}, "Incorrect algorithm name"
+    if params["algo"] == "egreedy":
+        bandit = EGreedy(params["n_arms"])
+        attacker = EGreedyAttacker(params["target"], params["delta"])
+    elif params["algo"] == "UCB":
+        bandit = UCB(params["n_arms"], variances)
+        attacker = UCBAttacker(params["target"], params["delta"], params["delta0"])
+    return attacker, bandit
 
 class Manager(BaseManager):
     #https://stackoverflow.com/questions/25938187/trying-to-use-multiprocessing-to-fill-an-array-in-python
