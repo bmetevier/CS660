@@ -39,7 +39,7 @@ def EG_experiment_2(params):
     mus = np.array([1, 0])
     target_stdev=1
     stdevs = np.array([0.05, 0.1, 0.2])
-    stdevs = np.array([0.2])
+#    stdevs = np.array([0.2])
     
     #collect data
     data = []
@@ -68,10 +68,11 @@ if __name__ == '__main__':
     n_trials = 10**2#3
     target_arm = 1
     n_jobs = 7
+    algo = "egreedy"
     
     params = {"n_arms":n_arms, "delta":delta, 
               "n_rounds":n_rounds, 
               "n_trials":n_trials, "target":target_arm, 
-              "n_jobs": n_jobs}
+              "n_jobs": n_jobs, "algo": algo}
               
     EG_experiment_2(params)
