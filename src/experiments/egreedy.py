@@ -12,7 +12,7 @@ def EG_experiment_1(params):
     print("running egreedy experiment 1...")
     #set up arm reward distributions
     mus = np.array([1, 2, 5])
-    mus = np.array([5])
+#    mus = np.array([5])
     target_mu=0
     sigmas = 0.1*np.ones(params["n_arms"])
     
@@ -27,7 +27,7 @@ def EG_experiment_1(params):
     fname = "egreedy_exp1"
     ytitle = 'attack cost'
     xtitle = 'log(round)'
-    labels = ['mu'+str(i)+'='+str(mus[i]) for i in range(mus.size)]
+    labels = ['mu='+str(mus[i]) for i in range(mus.size)]
     plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "logx")
         
     return data
@@ -52,7 +52,7 @@ def EG_experiment_2(params):
     fname = "egreedy_exp2"
     ytitle = 'log(attack cost)'
     xtitle = 'loglog(round)'
-    labels = ['sig'+str(i)+'='+str(stdevs[i]) for i in range(stdevs.size)]
+    labels = ['sig='+str(stdevs[i]) for i in range(stdevs.size)]
     plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "loglogxlogy")
         
     return data
@@ -69,7 +69,6 @@ def EG_experiment_3(params):
     xtitle = 'round'
     labels = ['attacked', 'without attack']
     plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "logx")
-        
 
 if __name__ == '__main__':
     #RUN EGREEDY EXPERIMENTS
@@ -78,7 +77,7 @@ if __name__ == '__main__':
     n_rounds = 10**3#5
     n_trials = 10**2#3
     target_arm = 1
-    n_jobs = 1
+    n_jobs = 7
     algo = "egreedy"
     
     params = {"n_arms":n_arms, "delta":delta, 

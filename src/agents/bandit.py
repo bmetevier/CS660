@@ -10,7 +10,7 @@ class Bandit(Agent):
         self._action = None
         
         self.n_arm_pulls = np.zeros(n_arms)
-        self._explore = True 
+        self._explore = False
         self.n_arms = n_arms
     
         self._ucb = False
@@ -42,7 +42,6 @@ class Bandit(Agent):
         
         if action==None:
             if self._ucb: 
-                self._explore = False
                 score = self.means + 3*np.sqrt(self.sigmas)*np.sqrt(np.log(self.round)/self.n_arm_pulls)
                 action = np.argmax(score)
             else:
@@ -64,15 +63,15 @@ class Bandit(Agent):
         self.round +=1 
         self._action = action
         self.n_arm_pulls[action] += 1
-        self._update_means(reward, action)
+        self._update_means(reward)
     
-    def _update_means(self, reward, action):
+    def _update_means(self, reward):
         """Updates the agent's internal mean estimations of each arm"""
-        if self.means[action] == -np.inf:
-            self.means[action] = reward
+        if self.means[self.action] == -np.inf:
+            self.means[self.action] = reward
         else:
-            previous_sum = self.means[action] * (self.n_arm_pulls[action] - 1)
-            self.means[action] = (previous_sum + reward) / self.n_arm_pulls[action]
+            previous_sum = self.means[self.action] * (self.n_arm_pulls[self.action] - 1)
+            self.means[self.action] = (previous_sum + reward) / self.n_arm_pulls[self.action]
 
 
         
