@@ -17,7 +17,6 @@ def _run_bandit(n_trials, params, means, variances, data):
     for trial in range(int(n_trials)):
         env = Environment(means, variances)
         attacker, bandit = get_alice_and_bob(params, variances)
-            
         attack_cost = 0
         for r in range(params["n_rounds"]):
             initial_pull = r<params["n_arms"]

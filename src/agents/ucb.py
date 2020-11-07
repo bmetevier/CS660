@@ -9,7 +9,6 @@ class UCB(Agent):
     def __init__(self, n_arms, sigmas):
         """
         """
-
         super().__init__()
         if n_arms<2:
             raise ValueError("number of arms must be greater than 1")
@@ -55,6 +54,7 @@ class UCB(Agent):
         return action
         
     def update_means(self, reward):
+
         if self.means[self.action] == -np.inf:
             self.means[self.action] = reward
         else:
