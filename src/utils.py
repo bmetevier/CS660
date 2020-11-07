@@ -4,8 +4,8 @@ from multiprocessing.managers import BaseManager
 from IPython import embed
 
 from env import Environment
-from agents import EGreedy
-from attackers import EGreedyAttacker
+from agents import EGreedy, UCB
+from attackers import EGreedyAttacker, UCBAttacker
 
 def _run_bandit(n_trials, params, means, variances, data):
     """
@@ -16,8 +16,13 @@ def _run_bandit(n_trials, params, means, variances, data):
     """
     for trial in range(int(n_trials)):
         env = Environment(means, variances)
-        bandit = EGreedy(params["n_arms"])
-        attacker = EGreedyAttacker(params["target"], params["delta"])
+        assert params["algo"] in {"egreedy", "UCB"}, "Incorrect algorithm name"
+        if params["algo"] == "egreedy":
+            bandit = EGreedy(params["n_arms"])
+            attacker = EGreedyAttacker(params["target"], params["delta"])
+        elif params["algo"] == "UCB":
+            bandit = UCB(params["n_arms"], variances)
+            attacker = UCBAttacker(params["target"], params["delta"])
         attack_cost = 0
         
         for r in range(params["n_rounds"]):

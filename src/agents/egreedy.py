@@ -23,7 +23,7 @@ class EGreedy(Agent):
         self._action = None
         
         self.n_arm_pulls = np.zeros(n_arms)
-        self._explore = None
+        self._explore = True
         self.n_arms = n_arms
     
     @property
@@ -44,7 +44,8 @@ class EGreedy(Agent):
     def sample_action(self, action=None):
         """chooses to explore or exploit, then 
         samples an action in the environment"""
-        
+
+        self.round += 1
         if action==None:
             if self._will_explore():
                 action = np.random.randint(self.n_arms)
@@ -52,8 +53,7 @@ class EGreedy(Agent):
                 #return ties randomly (np.argmin returns first min)
                 argmaxes = np.flatnonzero(self.means==self.means.max())
                 action = np.random.choice(argmaxes)
-        
-        self.round+=1
+
         self._action = action
         self.n_arm_pulls[action] += 1
         return action
@@ -74,5 +74,5 @@ class EGreedy(Agent):
         if self.means[self.action]==-np.inf:
             self.means[self.action] = reward
         else:
-            previous_sum = self._means[self.action] * (self.n_arm_pulls[self.action]-1)
+            previous_sum = self.means[self.action] * (self.n_arm_pulls[self.action]-1)
             self.means[self.action] = (previous_sum + reward)/self.n_arm_pulls[self.action]
