@@ -16,6 +16,7 @@ def plot(ys, xtitle, ytitle, labels, n_rounds, filename, logmsg=""):
     plt.show()
     f.savefig("experiments/results/"+filename+".pdf", bbox_inches='tight')
 
+
 def get_axes(ys, n_rounds, logmsg=""):
     X = np.arange(1, n_rounds+1)
     if "loglogx" in logmsg:

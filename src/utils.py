@@ -22,7 +22,7 @@ def _run_bandit(n_trials, params, means, variances, data):
             attacker = EGreedyAttacker(params["target"], params["delta"])
         elif params["algo"] == "UCB":
             bandit = UCB(params["n_arms"], variances)
-            attacker = UCBAttacker(params["target"], params["delta"])
+            attacker = UCBAttacker(params["target"], params["delta"], params["delta0"])
         attack_cost = 0
         
         for r in range(params["n_rounds"]):
