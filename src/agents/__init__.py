@@ -1,4 +1,5 @@
-from .egreedy import EGreedy
-from .ucb import UCB
+#from .egreedy import EGreedy
+#from .ucb import UCB
+from .bandit import Bandit
 
-__src__ = ["EGreedy", "UCB"]
+__src__ = ["Bandit"]

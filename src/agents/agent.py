@@ -14,11 +14,6 @@ class Agent(ABC):
     def sample_action(self):
         """Samples an action."""
         pass
-    
-    @abstractmethod
-    def update_means(self):
-        """Updates the agent's internal mean estimations of each arm"""
-        pass
 
 
         

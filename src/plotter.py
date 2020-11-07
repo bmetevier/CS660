@@ -13,8 +13,6 @@ def plot(ys, xtitle, ytitle, labels, n_rounds, filename, logmsg=""):
         else: #dotted lines for y=1/2 and y=1
             plt.plot(X, Ys[i], "--", color="gray")
 
-            
-    
     plt.xlabel(xtitle)
     plt.ylabel(ytitle)
     plt.legend()

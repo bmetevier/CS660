@@ -58,7 +58,18 @@ def EG_experiment_2(params):
     return data
 
 def EG_experiment_3(params):
-    pass
+    mus = np.array([1, 0])
+    target_stdev=1
+    stdevs = np.array([0.05, 0.1, 0.2])
+    
+    
+    #data plotting info
+    fname = "egreedy_exp3"
+    ytitle = 'target arm pulls'
+    xtitle = 'round'
+    labels = ['attacked', 'without attack']
+    plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "logx")
+        
 
 if __name__ == '__main__':
     #RUN EGREEDY EXPERIMENTS
@@ -67,7 +78,7 @@ if __name__ == '__main__':
     n_rounds = 10**3#5
     n_trials = 10**2#3
     target_arm = 1
-    n_jobs = 7
+    n_jobs = 1
     algo = "egreedy"
     
     params = {"n_arms":n_arms, "delta":delta, 

@@ -4,7 +4,7 @@ from multiprocessing.managers import BaseManager
 from IPython import embed
 
 from env import Environment
-from agents import EGreedy, UCB
+from agents import Bandit
 from attackers import EGreedyAttacker, UCBAttacker
 
 def _run_bandit(n_trials, params, means, variances, data):
@@ -30,18 +30,14 @@ def _run_bandit(n_trials, params, means, variances, data):
                 reward = attacker.manipulate_reward(env_reward, bandit, variances)
                 attack_cost+=attacker.alpha
                 
-            bandit.update_means(reward)
+            bandit.update_params(action, reward)
             
             data[r] += attack_cost
 
 def get_alice_and_bob(params, variances):
     assert params["algo"] in {"egreedy", "UCB"}, "Incorrect algorithm name"
-    if params["algo"] == "egreedy":
-        bandit = EGreedy(params["n_arms"])
-        attacker = EGreedyAttacker(params["target"], params["delta"])
-    elif params["algo"] == "UCB":
-        bandit = UCB(params["n_arms"], variances)
-        attacker = UCBAttacker(params["target"], params["delta"])
+    bandit = Bandit(params["algo"], params["n_arms"], variances)
+    attacker = UCBAttacker(params["target"], params["delta"]) if params["algo"]=="UCB" else EGreedyAttacker(params["target"], params["delta"])
     return attacker, bandit
 
 class Manager(BaseManager):
@@ -69,7 +65,7 @@ def run_bandit(params, means, variances):
         distribution[-1] += int(params["n_trials"]%n_workers)
         return distribution
     
-    if params["n_jobs"]==1:
+    if params["n_jobs"]==1 or params["n_trials"]<params["n_jobs"]:
         data = np.zeros(params["n_rounds"])
         _run_bandit(params["n_trials"], params, means, variances, data)
     else:

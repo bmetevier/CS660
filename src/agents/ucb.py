@@ -45,7 +45,6 @@ class UCB(Agent):
         """chooses to explore or exploit, then 
         samples an action in the environment"""
         self.round += 1
-
         if action == None:
             self._explore = False
             score = self.means + 3*np.sqrt(self.sigmas)*np.sqrt(np.log(self.round)/self.n_arm_pulls)

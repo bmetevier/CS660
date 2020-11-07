@@ -6,7 +6,7 @@ class EGreedy(Agent):
     Emulates the EGreedy algorithm described in 'Adversarial Attacks
     Against Multi-Armed Bandits'
     """
-    def __init__(self, n_arms):
+    def __init__(self, n_arms, variances=0):
         """
         
         Arguments:
