@@ -11,8 +11,8 @@ def EG_experiment_1(params):
     
     print("running egreedy experiment 1...")
     #set up arm reward distributions
-    mus = np.array([1, 2, 5])
-#    mus = np.array([5])
+#    mus = np.array([1, 2, 5])
+    mus = np.array([5])
     target_mu=0
     sigmas = 0.1*np.ones(params["n_arms"])
     
@@ -74,10 +74,10 @@ if __name__ == '__main__':
     #RUN EGREEDY EXPERIMENTS
     n_arms = 2
     delta=0.025
-    n_rounds = 10**3#5
-    n_trials = 10**2#3
+    n_rounds = 5
+    n_trials = 10#**2#3
     target_arm = 1
-    n_jobs = 7
+    n_jobs = None
     algo = "egreedy"
     
     params = {"n_arms":n_arms, "delta":delta, 
@@ -85,4 +85,4 @@ if __name__ == '__main__':
               "n_trials":n_trials, "target":target_arm, 
               "n_jobs": n_jobs, "algo": algo}
               
-    EG_experiment_2(params)
+    EG_experiment_1(params)

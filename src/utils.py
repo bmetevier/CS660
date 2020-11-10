@@ -26,12 +26,43 @@ def _run_bandit(n_trials, params, means, variances, data):
             else:
                 action = bandit.sample_action()
                 env_reward = env.get_reward(action)
-                reward = attacker.manipulate_reward(env_reward, bandit, variances)
+                reward = attacker.manipulate_reward(env_reward, action, bandit, variances)
                 attack_cost+=attacker.alpha
                 
             bandit.update_params(action, reward)
             
             data[r] += attack_cost
+
+#def _run_bandit_exp3(n_trials, params, means, variances, data):
+#    """
+#    Performs the bandit->environment->attacker interaction for a single trial.
+#    
+#    Returns:
+#        data (np.ndarray (n_rounds,)): number of target arm pulls per round
+#    """
+#    assert "attack" in params, "'attack' key not provided in dictionary"
+#    
+#    for trial in range(int(n_trials)):
+#        env = Environment(means, variances)
+#        attacker, bandit = get_alice_and_bob(params, variances)
+#        if params["attack"]:
+#            pass
+#        else:
+#            pass
+#            
+#            for r in range(params["n_rounds"]):
+#                initial_pull = r<params["n_arms"]
+#                if initial_pull: #pull each arm at least once
+#                    action = bandit.sample_action(r)
+#                    reward = env.get_reward(action)
+#                else:
+#                    action = bandit.sample_action()
+#                    env_reward = env.get_reward(action)
+#                    reward = attacker.manipulate_reward(env_reward, bandit, variances)
+#                
+#            bandit.update_params(action, reward)
+#            
+#            data[r] += attack_cost
 
 def get_alice_and_bob(params, variances):
     assert params["algo"] in {"egreedy", "UCB"}, "Incorrect algorithm name"
@@ -64,7 +95,7 @@ def run_bandit(params, means, variances):
         distribution[-1] += int(params["n_trials"]%n_workers)
         return distribution
     
-    if params["n_jobs"]==1 or params["n_trials"]<params["n_jobs"]:
+    if params["n_jobs"]==None or params["n_trials"]<params["n_jobs"] or params["n_jobs"]==1:
         data = np.zeros(params["n_rounds"])
         _run_bandit(params["n_trials"], params, means, variances, data)
     else:
@@ -79,6 +110,8 @@ def run_bandit(params, means, variances):
             p.start() 
         for process in jobs:
             process.join() 
+    D = np.array(data)/params["n_trials"]
+    print(D)
     return np.array(data)/params["n_trials"]
 
 def _get_data_array(n_rounds):
