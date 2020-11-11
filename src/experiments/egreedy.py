@@ -11,8 +11,9 @@ def EG_experiment_1(params):
     
     print("running egreedy experiment 1...")
     #set up arm reward distributions
+
     mus = np.array([1, 2, 5])
-    # mus = np.array([5])
+    mus = np.array([5])
     sigmas = 0.1*np.ones(params["n_arms"])
     
     #collect data
@@ -20,7 +21,7 @@ def EG_experiment_1(params):
     for mu in mus:
         means = np.array([mu, 0])
         print(f"trying mu={mu}")
-        data.append(run_bandit(params, means, sigmas**2))
+        data.append(run_bandit(params, means, sigmas**2, experiment=1))
         
     #data plotting info
     fname = "egreedy_exp1"
@@ -45,7 +46,7 @@ def EG_experiment_2(params):
     for stdev in stdevs:
         sigmas = np.array([stdev, target_stdev])
         print(f"trying sigma={stdev}")
-        data.append(run_bandit(params, mus, sigmas**2))
+        data.append(run_bandit(params, mus, sigmas**2, experiment=2))
         
     #data plotting info
     fname = "egreedy_exp2"
@@ -57,24 +58,30 @@ def EG_experiment_2(params):
     return data
 
 def EG_experiment_3(params):
-    mus = np.array([1, 0])
-    target_stdev=1
-    stdevs = np.array([0.05, 0.1, 0.2])
-    
+    variances = 0.1 * np.ones(2)
+    means = np.array([0.1,0])
+
+    #collect data
+    attacks = [True, False]
+    data = []
+    for attack in attacks:
+        print("attacking") if attack else print("not attacking")
+        params["attack"] = attack
+        data.append(run_bandit(params, means, variances, experiment=3))
     
     #data plotting info
     fname = "egreedy_exp3"
     ytitle = 'target arm pulls'
     xtitle = 'round'
     labels = ['attacked', 'without attack']
-    plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "logx")
+    plot(data, xtitle, ytitle, labels, params["n_rounds"], fname)
 
 if __name__ == '__main__':
     #RUN EGREEDY EXPERIMENTS
     n_arms = 2
     delta=0.025
     n_rounds = 10**3#5
-    n_trials = 10**2#3
+    n_trials = 1#0**2#3
     target_arm = 1
     n_jobs = 7
     algo = "egreedy"
@@ -84,4 +91,4 @@ if __name__ == '__main__':
               "n_trials":n_trials, "target":target_arm, 
               "n_jobs": n_jobs, "algo": algo}
               
-    EG_experiment_2(params)
+    EG_experiment_3(params)

@@ -72,6 +72,3 @@ class Bandit(Agent):
         else:
             previous_sum = self.means[self.action] * (self.n_arm_pulls[self.action] - 1)
             self.means[self.action] = (previous_sum + reward) / self.n_arm_pulls[self.action]
-
-
-        

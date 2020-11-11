@@ -26,11 +26,39 @@ def _run_bandit(n_trials, params, means, variances, data):
             else:
                 action = bandit.sample_action()
                 env_reward = env.get_reward(action)
-                reward = attacker.manipulate_reward(env_reward, bandit, variances)
+                reward = attacker.manipulate_reward(env_reward, action, bandit, variances)
                 attack_cost+=attacker.alpha
                 
             bandit.update_params(action, reward)
             data[r] += attack_cost
+
+def _run_bandit_exp3(n_trials, params, means, variances, data):
+    """
+    Performs the bandit->environment->attacker interaction for a single trial.
+    
+    Returns:
+        data (np.ndarray (n_rounds,)): number of target arm pulls per round
+    """
+    assert "attack" in params, "'attack' key not provided in dictionary"
+    
+    for trial in range(int(n_trials)):
+        env = Environment(means, variances)
+        attacker, bandit = get_alice_and_bob(params, variances)
+        total_arm_pulls = 0
+        for r in range(params["n_rounds"]):
+            initial_pull = r<params["n_arms"]
+            if initial_pull: #pull each arm at least once
+                action = bandit.sample_action(r)
+                reward = env.get_reward(action)
+            else:
+                action = bandit.sample_action()
+                reward = env.get_reward(action)
+                if r>2 and action==attacker.target: total_arm_pulls += 1
+                if params["attack"]:
+                    reward = attacker.manipulate_reward(reward, action, bandit, variances)  
+            bandit.update_params(action, reward)
+            if r>0: data[r] += total_arm_pulls
+
 
 def get_alice_and_bob(params, variances):
     assert params["algo"] in {"egreedy", "UCB"}, "Incorrect algorithm name"
@@ -42,7 +70,7 @@ class Manager(BaseManager):
     #https://stackoverflow.com/questions/25938187/trying-to-use-multiprocessing-to-fill-an-array-in-python
     pass
 
-def run_bandit(params, means, variances):
+def run_bandit(params, means, variances, experiment):
     """
     Performs the bandit->environment->attacker interaction for a number of trials. 
     
@@ -63,16 +91,17 @@ def run_bandit(params, means, variances):
         distribution[-1] += int(params["n_trials"]%n_workers)
         return distribution
     
-    if params["n_jobs"]==1 or params["n_trials"]<params["n_jobs"]:
+    func_run_bandit = _run_bandit if experiment<3 else _run_bandit_exp3
+    if params["n_jobs"]==None or params["n_trials"]<params["n_jobs"] or params["n_jobs"]==1:
         data = np.zeros(params["n_rounds"])
-        _run_bandit(params["n_trials"], params, means, variances, data)
+        func_run_bandit(params["n_trials"], params, means, variances, data)
     else:
         trial_dist = get_trials_per_worker()
         data = _get_data_array(params["n_rounds"])
         
         jobs = []
         for w in range(params["n_jobs"]):
-            p = mp.Process(target=_run_bandit, 
+            p = mp.Process(target=func_run_bandit, 
                            args=(trial_dist[w], params, means, variances, data))
             jobs.append(p)
             p.start() 

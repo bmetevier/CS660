@@ -20,7 +20,7 @@ class EGreedyAttacker(MABAttacker):
     def alpha(self):
         return self._alpha
         
-    def manipulate_reward(self, reward, bandit, variances):
+    def manipulate_reward(self, reward, action, bandit, variances):
         """
         Performs the reward manipulation attack on the Egreedy bandit.
         
@@ -35,7 +35,8 @@ class EGreedyAttacker(MABAttacker):
         if invalid_means:
             raise ValueError("bandit has not updated all arms")
             
-        attack_bandit = not (bandit.explore or bandit.action==self.target)
+        attack_bandit = not (bandit.explore or action==self.target)
+        
         if attack_bandit:
             self._alpha = max(0, self._get_alpha(reward, bandit, sigmas[bandit.action]))
         else:
