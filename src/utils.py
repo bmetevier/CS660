@@ -30,7 +30,6 @@ def _run_bandit(n_trials, params, means, variances, data):
                 attack_cost+=attacker.alpha
                 
             bandit.update_params(action, reward)
-            
             data[r] += attack_cost
 
 def get_alice_and_bob(params, variances):
@@ -78,7 +77,8 @@ def run_bandit(params, means, variances):
             jobs.append(p)
             p.start() 
         for process in jobs:
-            process.join() 
+            process.join()
+    # print(data)
     return np.array(data)/params["n_trials"]
 
 def _get_data_array(n_rounds):

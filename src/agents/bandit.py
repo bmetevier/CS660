@@ -55,7 +55,7 @@ class Bandit(Agent):
     
     def _will_explore(self):
         r = np.random.uniform()
-        self._explore = r <= 1/(self.round+1)
+        self._explore = r < 1/(self.round+1)
         return self._explore
     
     def update_params(self, action, reward):

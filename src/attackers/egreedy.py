@@ -38,10 +38,9 @@ class EGreedyAttacker(MABAttacker):
         attack_bandit = not (bandit.explore or bandit.action==self.target)
         if attack_bandit:
             self._alpha = max(0, self._get_alpha(reward, bandit, sigmas[bandit.action]))
-            return reward-self.alpha
         else:
             self._alpha = 0
-            return reward            
+        return reward-self.alpha
     
     def _get_alpha(self, reward, bandit, sigma):
         """
@@ -54,12 +53,11 @@ class EGreedyAttacker(MABAttacker):
         
         #func isn't called when action=target arm (total arms = 2)
         action = 0
-        N_prev = bandit.n_arm_pulls[action]        
+        N_prev = bandit.n_arm_pulls[action]
         prev_reward_sum = bandit.means[action] * N_prev
         N_target = bandit.n_arm_pulls[self.target]
-        
+
         beta = self._get_beta(N_target, sigma, bandit.n_arms)
-        
         return (prev_reward_sum + reward - 
                 (bandit.means[self.target]-2*beta)*(N_prev+1))
         
