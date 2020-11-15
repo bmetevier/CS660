@@ -1,5 +1,7 @@
 from experiments.egreedy import *
 from experiments.ucb import *
+import sys
+import os
 
 """
 Re-Implementation of experiments for ADVERSARIAL ATTACKS IN STOCHASTIC BANDITS
@@ -7,16 +9,21 @@ Re-Implementation of experiments for ADVERSARIAL ATTACKS IN STOCHASTIC BANDITS
 """
 
 def main():
-    
+
+    if not os.path.exists("experiments/results"):
+        os.makedirs("experiments/results")
+    if not os.path.exists("experiments/results/data"):
+        os.makedirs("experiments/results/data")
+
     #RUN EGREEDY EXPERIMENTS
     n_arms = 2
     delta = 0.05
-    n_rounds = 10**4#5
-    n_trials = 50**1#3
+    n_rounds = 10**2
+    n_trials = 1#3
     target_arm = 1
-    n_jobs = 7
-    algo = "UCB" # {"UCB", "egreedy"}
-    delta0 = 0.1 # parameter for UCB
+    n_jobs = 6
+    algo = "UCB"  # {"UCB", "egreedy"}
+    delta0 = 0.1  # parameter for UCB
     
     params = {"n_arms":n_arms, "delta":delta, "delta0":delta0,
               "n_rounds":n_rounds, 
@@ -31,4 +38,5 @@ def main():
     #RUN UCB EXPERIMENTS
     
 if __name__ == '__main__':
+    print(sys.argv[1:])
     main()
