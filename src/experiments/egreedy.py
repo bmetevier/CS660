@@ -80,10 +80,10 @@ if __name__ == '__main__':
     #RUN EGREEDY EXPERIMENTS
     n_arms = 2
     delta=0.025
-    n_rounds = 10**3#5
-    n_trials = 1#0**2#3
+    n_rounds = 10**5
+    n_trials = 1
     target_arm = 1
-    n_jobs = 7
+    n_jobs = None
     algo = "egreedy"
     
     params = {"n_arms":n_arms, "delta":delta, 
