@@ -42,7 +42,7 @@ class Bandit(Agent):
         
         if action==None:
             if self._ucb:
-                score = self.means + 3*np.sqrt(self.sigmas)*np.sqrt(np.log(self.round+1)/self.n_arm_pulls)
+                score = self.means + 3*self.sigmas*np.sqrt(np.log(self.round+1)/self.n_arm_pulls)
                 action = np.argmax(score)
             else:
                 if self._will_explore():

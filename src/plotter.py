@@ -2,14 +2,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 from IPython import embed
 
-def plot(ys, xtitle, ytitle, labels, n_rounds, filename, logmsg=""):
+def plot(ys, xtitle, ytitle, labels, n_rounds, filename, logmsg="", plotfn=""):
     
     X,Ys = get_axes(ys, n_rounds, logmsg)
     f = plt.figure()
     colors = ['black', 'grey', 'brown']
     for i in range(len(Ys)):
         if i<3:
-            plt.plot(X, Ys[i], label=labels[i], color=colors[i])
+            if plotfn == "semilogx":
+                plt.semilogx(X, Ys[i], label=labels[i], color=colors[i])
+            else:
+                plt.plot(X, Ys[i], label=labels[i], color=colors[i])
         else: #dotted lines for y=1/2 and y=1
             plt.plot(X, Ys[i], "--", color="gray")
 

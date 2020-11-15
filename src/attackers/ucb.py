@@ -33,29 +33,26 @@ class UCBAttacker(MABAttacker):
         if self.alphas is None:
             self.alphas = np.zeros([bandit.n_arms])
         if self.mu0 is None:
-            self.mu0 = bandit.means
+            self.mu0 = np.copy(bandit.means)
+        # store
+        prev = self.mu0[action] * (bandit.n_arm_pulls[action])
+        self.mu0[action] = (prev + reward) / (bandit.n_arm_pulls[action]+1)
 
-        # print(bandit.n_arm_pulls)
-        # print(self.mu0)
-        # print(bandit.means)
-        prev = self.mu0[bandit.action] * bandit.n_arm_pulls[bandit.action]
-        self.mu0[bandit.action] = (prev + reward) / (bandit.n_arm_pulls[bandit.action]+1)
 
-        attack_bandit = not (bandit.explore or bandit.action == self.target)
+        attack_bandit = not (bandit.explore or action == self.target)
         if attack_bandit:
-            self._alpha = max(0, self._get_alpha(reward, bandit, sigmas[bandit.action]))
-            self.alphas[bandit.action] += self._alpha
+            self._alpha = max(0, self._get_alpha(reward, bandit, sigmas[action], action))
+            self.alphas[action] += self._alpha
         else:
             self._alpha = 0
         return reward-self.alpha
 
-    def _get_alpha(self, reward, bandit, sigma):
-        Ni = bandit.n_arm_pulls[bandit.action]
-        Ni_mui = self.mu0[bandit.action] * Ni + reward
+    def _get_alpha(self, reward, bandit, sigma, action):
+        Ni = bandit.n_arm_pulls[action]
+        Ni_mui = self.mu0[action] * Ni + reward
         beta = self._get_beta(bandit.n_arm_pulls[self.target], sigma, bandit.n_arms)
         Ni_muK = (Ni+1) * (bandit.means[self.target]-2*beta -self.delta0)
-
-        return Ni_mui - self.alphas[bandit.action] - Ni_muK
+        return Ni_mui - self.alphas[action] - Ni_muK
 
     def _get_beta(self, N, sigma, n_arms):
         """
