@@ -17,7 +17,7 @@ class UCBAttacker(MABAttacker):
     def alpha(self):
         return self._alpha
         
-    def manipulate_reward(self, reward, bandit, sigmas):
+    def manipulate_reward(self, reward, action, bandit, sigmas):
         """
         Performs the reward manipulation attack on the Egreedy bandit.
         
@@ -38,8 +38,8 @@ class UCBAttacker(MABAttacker):
         # print(bandit.n_arm_pulls)
         # print(self.mu0)
         # print(bandit.means)
-        prev = self.mu0[bandit.action] * (bandit.n_arm_pulls[bandit.action]-1)
-        self.mu0[bandit.action] = (prev + reward) / bandit.n_arm_pulls[bandit.action]
+        prev = self.mu0[bandit.action] * bandit.n_arm_pulls[bandit.action]
+        self.mu0[bandit.action] = (prev + reward) / (bandit.n_arm_pulls[bandit.action]+1)
 
         attack_bandit = not (bandit.explore or bandit.action == self.target)
         if attack_bandit:
@@ -51,9 +51,9 @@ class UCBAttacker(MABAttacker):
 
     def _get_alpha(self, reward, bandit, sigma):
         Ni = bandit.n_arm_pulls[bandit.action]
-        Ni_mui = self.mu0[bandit.action] * (Ni-1) + reward
+        Ni_mui = self.mu0[bandit.action] * Ni + reward
         beta = self._get_beta(bandit.n_arm_pulls[self.target], sigma, bandit.n_arms)
-        Ni_muK = Ni * (bandit.means[self.target]-2*beta -self.delta0)
+        Ni_muK = (Ni+1) * (bandit.means[self.target]-2*beta -self.delta0)
 
         return Ni_mui - self.alphas[bandit.action] - Ni_muK
 

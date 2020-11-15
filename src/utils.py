@@ -63,7 +63,8 @@ def _run_bandit_exp3(n_trials, params, means, variances, data):
 def get_alice_and_bob(params, variances):
     assert params["algo"] in {"egreedy", "UCB"}, "Incorrect algorithm name"
     bandit = Bandit(params["algo"], params["n_arms"], variances)
-    attacker = UCBAttacker(params["target"], params["delta"]) if params["algo"]=="UCB" else EGreedyAttacker(params["target"], params["delta"])
+    attacker = UCBAttacker(params["target"], params["delta"], params['delta0']) \
+        if params["algo"]=="UCB" else EGreedyAttacker(params["target"], params["delta"])
     return attacker, bandit
 
 class Manager(BaseManager):
@@ -107,7 +108,6 @@ def run_bandit(params, means, variances, experiment):
             p.start() 
         for process in jobs:
             process.join()
-    # print(data)
     return np.array(data)/params["n_trials"]
 
 def _get_data_array(n_rounds):
