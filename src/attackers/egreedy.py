@@ -56,7 +56,7 @@ class EGreedyAttacker(MABAttacker):
         
         #func isn't called when action=target arm (total arms = 2)
         action = 0
-        N_prev = bandit.n_arm_pulls[action]-1
+        N_prev = bandit.n_arm_pulls[action]
         prev_reward_sum = bandit.means[action] * N_prev
         N_target = bandit.n_arm_pulls[self.target]
 
@@ -72,6 +72,7 @@ class EGreedyAttacker(MABAttacker):
             N (int): number of arm pulls of arm i up to round t
             sigma (float): stdev of reward distribution associated with arm i
         """
+
         outer = (2*sigma**2)/N
         inner = (np.pi**2)*(n_arms*N**2)/(3*self.delta)
         return np.sqrt(outer*np.log(inner))

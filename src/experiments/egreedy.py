@@ -13,7 +13,7 @@ def EG_experiment_1(params):
     #set up arm reward distributions
 
     mus = np.array([1, 2, 5])
-    mus = np.array([5])
+
     sigmas = 0.1*np.ones(params["n_arms"])
     
     #collect data
@@ -90,5 +90,6 @@ if __name__ == '__main__':
               "n_rounds":n_rounds, 
               "n_trials":n_trials, "target":target_arm, 
               "n_jobs": n_jobs, "algo": algo}
-              
-    EG_experiment_3(params)
+    EG_experiment_1(params)
+    # EG_experiment_3(params)
+    # EG_experiment_3(params)
