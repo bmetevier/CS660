@@ -20,6 +20,7 @@ def main():
     delta = 0.05
     n_rounds = 10**2
     n_trials = 1#3
+
     target_arm = 1
     n_jobs = 6
     algo = "UCB"  # {"UCB", "egreedy"}
@@ -38,5 +39,4 @@ def main():
     #RUN UCB EXPERIMENTS
     
 if __name__ == '__main__':
-    print(sys.argv[1:])
     main()
