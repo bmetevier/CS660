@@ -2,11 +2,12 @@ import numpy as np
 from IPython import embed
 from plotter import plot
 from utils import run_bandit
+import os, sys
 
 #############
 #EGREEDY EXPERIMENTS
 #############
-def EG_experiment_1(params):
+def EG_experiment_1(params, plot=False, repid=0):
     """Vary the mean of non-target arm."""
     
     print("running egreedy experiment 1...")
@@ -21,16 +22,22 @@ def EG_experiment_1(params):
         means = np.array([mu, 0])
         print(f"trying mu={mu}")
         data.append(run_bandit(params, means, sigmas**2, experiment=1))
-        
+
+    if not os.path.exists("/mnt/nfs/work1/jensen/ktakatsu/egreedy_exp1"):
+        os.makedirs("/mnt/nfs/work1/jensen/ktakatsu/egreedy_exp1")
+    with open('/mnt/nfs/work1/jensen/ktakatsu/egreedy_exp1/{}.npy'.format(str(repid)), 'wb') as f:
+        np.save(f, np.array(data))
+
     #data plotting info
-    fname = "egreedy_exp1"
-    ytitle = 'attack cost'
-    xtitle = 'log(round)'
-    labels = ['mu='+str(mus[i]) for i in range(mus.size)]
-    plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "logx")
+    if plot:
+        fname = "egreedy_exp1"
+        ytitle = 'attack cost'
+        xtitle = 'log(round)'
+        labels = ['mu='+str(mus[i]) for i in range(mus.size)]
+        plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "logx")
     return data
 
-def EG_experiment_2(params):
+def EG_experiment_2(params, plot=False):
     """Vary the variance of the non-target arm."""
     print("running egreedy experiment 2...")
     #set up arm reward distributions
@@ -44,15 +51,16 @@ def EG_experiment_2(params):
         print(f"trying sigma={stdev}")
         data.append(run_bandit(params, mus, sigmas**2, experiment=2))
     #data plotting info
-    fname = "egreedy_exp2"
-    ytitle = 'log(attack cost)'
-    xtitle = 'loglog(round)'
-    labels = ['sig='+str(stdevs[i]) for i in range(stdevs.size)]
-    plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "loglogxlogy")
+    if plot:
+        fname = "egreedy_exp2"
+        ytitle = 'log(attack cost)'
+        xtitle = 'loglog(round)'
+        labels = ['sig='+str(stdevs[i]) for i in range(stdevs.size)]
+        plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "loglogxlogy")
         
     return data
 
-def EG_experiment_3(params):
+def EG_experiment_3(params, plot=False):
     variances = 0.1 * np.ones(2)
     means = np.array([0.1,0])
 
@@ -63,20 +71,22 @@ def EG_experiment_3(params):
         print("attacking") if attack else print("not attacking")
         params["attack"] = attack
         data.append(run_bandit(params, means, variances, experiment=3))
-    
-    #data plotting info
-    fname = "egreedy_exp3"
-    ytitle = 'target arm pulls'
-    xtitle = 'round'
-    labels = ['attacked', 'without attack']
-    plot(data, xtitle, ytitle, labels, params["n_rounds"], fname)
+
+    if plot:
+        #data plotting info
+        fname = "egreedy_exp3"
+        ytitle = 'target arm pulls'
+        xtitle = 'round'
+        labels = ['attacked', 'without attack']
+        plot(data, xtitle, ytitle, labels, params["n_rounds"], fname)
 
 if __name__ == '__main__':
+    task_id = sys.argv[1]
     #RUN EGREEDY EXPERIMENTS
     n_arms = 2
     delta=0.025
     n_rounds = 10**7
-    n_trials = 10**2
+    n_trials = 1
     target_arm = 1
     n_jobs = None
     algo = "egreedy"
@@ -85,6 +95,7 @@ if __name__ == '__main__':
               "n_trials":n_trials, "target":target_arm, 
               "n_jobs": n_jobs, "algo": algo}
 
-    EG_experiment_1(params)
-    # EG_experiment_3(params)
+    EG_experiment_1(params, repid=task_id)
+    EG_experiment_2(params, repid=task_id)
+    EG_experiment_3(params, repid=task_id)
     # EG_experiment_3(params)
