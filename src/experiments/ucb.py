@@ -25,12 +25,12 @@ def UCB_experiment_1(params):
     ytitle = 'attack cost'
     xtitle = 'round'
     labels = ['delta0' + str(i) + '=' + str(d0s[i]) for i in range(d0s.size)]
-    plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "")
+    plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "logx")
 
 def UCB_experiment_2(params):
-    print("running UCB experiment 1...")
+    print("running UCB experiment 2...")
     # set up arm reward distributions
-    sigmas = np.array([0.1, 0.2, 0.5])
+    sigmas = np.array([0.5])
     params['delta0'] = 0.1
 
     # collect data
@@ -49,7 +49,7 @@ def UCB_experiment_2(params):
 
 def UCB_experiment_3(params):
     variances = 0.1 * np.ones(2)
-    means = np.array([0.1, 0])
+    means = np.array([1, 0])
     params['delta0'] = 0.1
 
     # collect data
@@ -65,4 +65,5 @@ def UCB_experiment_3(params):
     ytitle = 'target arm pulls'
     xtitle = 'round'
     labels = ['attacked', 'without attack']
+    print(data)
     plot(data, xtitle, ytitle, labels, params["n_rounds"], fname)
