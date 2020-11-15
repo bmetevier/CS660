@@ -8,7 +8,7 @@ Re-Implementation of experiments for ADVERSARIAL ATTACKS IN STOCHASTIC BANDITS
 #http://papers.nips.cc/paper/7622-adversarial-attacks-on-stochastic-bandits.pdf
 """
 
-def main():
+def main(task_id):
 
     if not os.path.exists("experiments/results"):
         os.makedirs("experiments/results")
@@ -31,12 +31,13 @@ def main():
               "n_trials":n_trials, "target":target_arm,
               "n_jobs": n_jobs, "algo": algo}
               
-    UCB_experiment_1(params)
-    UCB_experiment_2(params)
-    UCB_experiment_3(params)
+    UCB_experiment_1(params, repid=task_id)
+    UCB_experiment_2(params, repid=task_id)
+    UCB_experiment_3(params, repid=task_id)
 
 
     #RUN UCB EXPERIMENTS
     
 if __name__ == '__main__':
-    main()
+    task_id = sys.argv[1:]
+    main(task_id)
