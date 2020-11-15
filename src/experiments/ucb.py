@@ -51,7 +51,7 @@ def UCB_experiment_3(params):
     variances = 0.1 * np.ones(2)
     means = np.array([1, 0])
     params['delta0'] = 0.1
-
+    params['n_jobs'] = None
     # collect data
     attacks = [True, False]
     data = []
@@ -65,7 +65,6 @@ def UCB_experiment_3(params):
     ytitle = 'target arm pulls'
     xtitle = 'round'
     labels = ['attacked', 'without attack']
-    print(data)
     plot(data, xtitle, ytitle, labels, params["n_rounds"], fname)
 
 #if __name__ == '__main__':

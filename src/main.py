@@ -11,8 +11,8 @@ def main():
     #RUN EGREEDY EXPERIMENTS
     n_arms = 2
     delta = 0.05
-    n_rounds = 10**4#5
-    n_trials = 50**1#3
+    n_rounds = 10**5#5
+    n_trials = 10**2#3
     target_arm = 1
     n_jobs = 7
     algo = "UCB" # {"UCB", "egreedy"}
