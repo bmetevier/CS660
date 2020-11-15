@@ -67,3 +67,20 @@ def UCB_experiment_3(params):
     labels = ['attacked', 'without attack']
     print(data)
     plot(data, xtitle, ytitle, labels, params["n_rounds"], fname)
+
+#if __name__ == '__main__':
+#    #RUN UCB EXPERIMENTS
+#    n_arms = 2
+#    delta=0.05
+#    n_rounds = 10
+#    n_trials = 5
+#    target_arm = 1
+#    n_jobs = 7
+#    algo = "ucb"
+#    
+#    params = {"n_arms":n_arms, "delta":delta, 
+#              "n_rounds":n_rounds, 
+#              "n_trials":n_trials, "target":target_arm, 
+#              "n_jobs": n_jobs, "algo": algo}
+#              
+#    UCB_experiment_1(params)

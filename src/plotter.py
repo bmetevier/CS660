@@ -29,7 +29,8 @@ def get_axes(ys, n_rounds, logmsg=""):
     
     if "logy" in logmsg:
         #first two indices are zero
-        Ys = [np.log(y[1:]) for y in ys]
+        Ys = [np.log(y[2:]) for y in ys]
+        X = X[1:]
         #add y=1/2 and y=1 
 #        Ys.append(X) #m=1
 #        Ys.append(0.5*X) #m=1/2

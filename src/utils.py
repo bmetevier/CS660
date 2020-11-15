@@ -2,6 +2,7 @@ import numpy as np
 import multiprocessing as mp
 from multiprocessing.managers import BaseManager
 from IPython import embed
+import sys
 
 from env import Environment
 from agents import Bandit
@@ -53,10 +54,13 @@ def _run_bandit_exp3(n_trials, params, means, variances, data):
             else:
                 action = bandit.sample_action()
                 reward = env.get_reward(action)
-                if r>2 and action==attacker.target: total_arm_pulls += 1
+                target_pulled = r>2 and action==attacker.target and (not bandit.explore)
+                total_arm_pulls += int(target_pulled)
                 if params["attack"]:
                     reward = attacker.manipulate_reward(reward, action, bandit, variances)  
             bandit.update_params(action, reward)
+#            if r>50 and not params["attack"] and target_pulled: 
+#                embed()
             if r>0: data[r] += total_arm_pulls
 
 
