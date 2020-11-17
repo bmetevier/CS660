@@ -7,7 +7,7 @@ import os, sys
 #############
 #EGREEDY EXPERIMENTS
 #############
-def EG_experiment_1(params, plot=False, repid=0):
+def EG_experiment_1(params, plot=False, repid=0, swarm=False):
     """Vary the mean of non-target arm."""
     
     print("running egreedy experiment 1...")
@@ -23,10 +23,11 @@ def EG_experiment_1(params, plot=False, repid=0):
         print(f"trying mu={mu}")
         data.append(run_bandit(params, means, sigmas**2, experiment=1))
 
-    if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/egreedy_exp1"):
-        os.makedirs("/mnt/nfs/scratch1/ktakatsu/egreedy_exp1")
-    with open('/mnt/nfs/scratch1/ktakatsu/egreedy_exp1/{}.npy'.format(str(repid)), 'wb') as f:
-        np.save(f, np.array(data))
+    if swarm:
+        if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/egreedy_exp1"):
+            os.makedirs("/mnt/nfs/scratch1/ktakatsu/egreedy_exp1")
+        with open('/mnt/nfs/scratch1/ktakatsu/egreedy_exp1/{}.npy'.format(str(repid)), 'wb') as f:
+            np.save(f, np.array(data))
 
     #data plotting info
     if plot:
@@ -37,7 +38,7 @@ def EG_experiment_1(params, plot=False, repid=0):
         plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "logx")
     return data
 
-def EG_experiment_2(params, plot=False, repid=0):
+def EG_experiment_2(params, plot=False, repid=0, swarm=False):
     """Vary the variance of the non-target arm."""
     print("running egreedy experiment 2...")
     #set up arm reward distributions
@@ -51,10 +52,11 @@ def EG_experiment_2(params, plot=False, repid=0):
         print(f"trying sigma={stdev}")
         data.append(run_bandit(params, mus, sigmas**2, experiment=2))
 
-    if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/egreedy_exp2"):
-        os.makedirs("/mnt/nfs/scratch1/ktakatsu/egreedy_exp2")
-    with open('/mnt/nfs/scratch1/ktakatsu/egreedy_exp2/{}.npy'.format(str(repid)), 'wb') as f:
-        np.save(f, np.array(data))
+    if swarm:
+        if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/egreedy_exp2"):
+            os.makedirs("/mnt/nfs/scratch1/ktakatsu/egreedy_exp2")
+        with open('/mnt/nfs/scratch1/ktakatsu/egreedy_exp2/{}.npy'.format(str(repid)), 'wb') as f:
+            np.save(f, np.array(data))
 
     #data plotting info
     if plot:
@@ -66,10 +68,11 @@ def EG_experiment_2(params, plot=False, repid=0):
         
     return data
 
-def EG_experiment_3(params, plot=False, repid=0):
+def EG_experiment_3(params, plot=False, repid=0, swarm=False):
     variances = 0.1 * np.ones(2)
     means = np.array([1,0])
     params['n_jobs'] = None
+
     #collect data
     attacks = [True, False]
     data = []
@@ -77,11 +80,11 @@ def EG_experiment_3(params, plot=False, repid=0):
         print("attacking") if attack else print("not attacking")
         params["attack"] = attack
         data.append(run_bandit(params, means, variances, experiment=3))
-
-    if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/egreedy_exp3"):
-        os.makedirs("/mnt/nfs/scratch1/ktakatsu/egreedy_exp3")
-    with open('/mnt/nfs/scratch1/ktakatsu/egreedy_exp3/{}.npy'.format(str(repid)), 'wb') as f:
-        np.save(f, np.array(data))
+    if swarm:
+        if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/egreedy_exp3"):
+            os.makedirs("/mnt/nfs/scratch1/ktakatsu/egreedy_exp3")
+        with open('/mnt/nfs/scratch1/ktakatsu/egreedy_exp3/{}.npy'.format(str(repid)), 'wb') as f:
+            np.save(f, np.array(data))
 
     if plot:
         #data plotting info
@@ -108,5 +111,7 @@ if __name__ == '__main__':
 
     #EG_experiment_1(params, repid=task_id)
     #EG_experiment_2(params, repid=task_id)
-    EG_experiment_3(params, repid=task_id)
+    EG_experiment_1(params, repid=task_id, swarm=True)
+    EG_experiment_2(params, repid=task_id, swarm=True)
+    EG_experiment_3(params, repid=task_id, swarm=True)
     # EG_experiment_3(params)

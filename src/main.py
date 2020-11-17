@@ -32,8 +32,8 @@ def main(task_id):
               "n_jobs": n_jobs, "algo": algo}
               
     UCB_experiment_1(params, repid=task_id)
-    UCB_experiment_2(params, repid=task_id)
-    UCB_experiment_3(params, repid=task_id)
+    # UCB_experiment_2(params, repid=task_id)
+    # UCB_experiment_3(params, repid=task_id)
 
 
     #RUN UCB EXPERIMENTS

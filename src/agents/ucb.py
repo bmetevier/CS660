@@ -54,7 +54,6 @@ class UCB(Agent):
         return action
         
     def update_means(self, reward):
-
         if self.means[self.action] == -np.inf:
             self.means[self.action] = reward
         else:

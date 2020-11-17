@@ -9,7 +9,7 @@ import sys
 #UCB EXPERIMENTS
 #############
 
-def UCB_experiment_1(params, plot=False, repid=0):
+def UCB_experiment_1(params, plot=False, repid=0, swarm=False):
     print("running UCB experiment 1...")
     # set up arm reward distributions
     d0s = np.array([0.1, 0.2, 0.5])
@@ -23,10 +23,11 @@ def UCB_experiment_1(params, plot=False, repid=0):
         params['delta0'] = d0
         data.append(run_bandit(params, means, sigmas ** 2, experiment=1))
 
-    if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/UCB_exp1"):
-        os.makedirs("/mnt/nfs/scratch1/ktakatsu/UCB_exp1")
-    with open('/mnt/nfs/scratch1/ktakatsu/UCB_exp1/{}.npy'.format(str(repid)), 'wb') as f:
-        np.save(f, np.array(data))
+    if swarm:
+        if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/UCB_exp1"):
+            os.makedirs("/mnt/nfs/scratch1/ktakatsu/UCB_exp1")
+        with open('/mnt/nfs/scratch1/ktakatsu/UCB_exp1/{}.npy'.format(str(repid)), 'wb') as f:
+            np.save(f, np.array(data))
 
     if plot:
         fname = "UCB_exp1"
@@ -36,7 +37,8 @@ def UCB_experiment_1(params, plot=False, repid=0):
         plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "", "semilogx")
     return data
 
-def UCB_experiment_2(params, plot=False, repid=0):
+
+def UCB_experiment_2(params, plot=False, repid=0, swarm=False):
     print("running UCB experiment 2...")
     # set up arm reward distributions
     sigmas = np.array([0.5, 0.2, 0.1])
@@ -50,10 +52,11 @@ def UCB_experiment_2(params, plot=False, repid=0):
         ss = sigma * np.ones(params["n_arms"])
         data.append(run_bandit(params, means, ss ** 2, experiment=1))
 
-    if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/UCB_exp2"):
-        os.makedirs("/mnt/nfs/scratch1/ktakatsu/UCB_exp2")
-    with open('/mnt/nfs/scratch1/ktakatsu/UCB_exp2/{}.npy'.format(str(repid)), 'wb') as f:
-        np.save(f, np.array(data))
+    if swarm:
+        if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/UCB_exp2"):
+            os.makedirs("/mnt/nfs/scratch1/ktakatsu/UCB_exp2")
+        with open('/mnt/nfs/scratch1/ktakatsu/UCB_exp2/{}.npy'.format(str(repid)), 'wb') as f:
+            np.save(f, np.array(data))
 
     if plot:
         fname = "UCB_exp2"
@@ -63,7 +66,8 @@ def UCB_experiment_2(params, plot=False, repid=0):
         plot(data, xtitle, ytitle, labels, params["n_rounds"], fname, "", "semilogx")
     return data
 
-def UCB_experiment_3(params, plot=False, repid=0):
+
+def UCB_experiment_3(params, plot=False, repid=0, swarm=False):
     params['n_jobs'] = None
     variances = 0.1 * np.ones(2)
     means = np.array([1, 0])
@@ -77,10 +81,11 @@ def UCB_experiment_3(params, plot=False, repid=0):
         params["attack"] = attack
         data.append(run_bandit(params, means, variances, experiment=3))
 
-    if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/UCB_exp3"):
-        os.makedirs("/mnt/nfs/scratch1/ktakatsu/UCB_exp3")
-    with open('/mnt/nfs/scratch1/ktakatsu/UCB_exp3/{}.npy'.format(str(repid)), 'wb') as f:
-        np.save(f, np.array(data))
+    if swarm:
+        if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/UCB_exp3"):
+            os.makedirs("/mnt/nfs/scratch1/ktakatsu/UCB_exp3")
+        with open('/mnt/nfs/scratch1/ktakatsu/UCB_exp3/{}.npy'.format(str(repid)), 'wb') as f:
+            np.save(f, np.array(data))
 
     # data plotting info
     if plot:
