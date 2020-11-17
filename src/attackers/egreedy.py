@@ -20,7 +20,7 @@ class EGreedyAttacker(MABAttacker):
     def alpha(self):
         return self._alpha
         
-    def manipulate_reward(self, reward, action, bandit, variances):
+    def manipulate_reward(self, reward, action, bandit, sigmas):
         """
         Performs the reward manipulation attack on the Egreedy bandit.
         
@@ -30,7 +30,6 @@ class EGreedyAttacker(MABAttacker):
             variances (np.ndarray (bandit.n_arms,)): variances of reward 
                 distribution associated with each arm
         """
-        sigmas = np.sqrt(variances)
         invalid_means = -np.inf in bandit.means
         if invalid_means:
             raise ValueError("bandit has not updated all arms")
@@ -40,7 +39,7 @@ class EGreedyAttacker(MABAttacker):
         if attack_bandit:
             # if bandit.n_arm_pulls.sum() == 2:
             #     print(max(0, self._get_alpha(reward, bandit, sigmas[bandit.action])))
-            self._alpha = max(0, self._get_alpha(reward, bandit, sigmas[bandit.action]))
+            self._alpha = max(0, self._get_alpha(reward, bandit, sigmas[action]))
         else:
             self._alpha = 0
         return reward-self.alpha
@@ -56,12 +55,11 @@ class EGreedyAttacker(MABAttacker):
         
         #func isn't called when action=target arm (total arms = 2)
         action = 0
-        N_prev = bandit.n_arm_pulls[action]
-        prev_reward_sum = bandit.means[action] * N_prev
-        N_target = bandit.n_arm_pulls[self.target]
-        beta = self._get_beta(N_target, sigma, bandit.n_arms)
-        return (prev_reward_sum + reward - 
-                (bandit.means[self.target]-2*beta)*(N_prev+1))
+        Ni = bandit.n_arm_pulls[action]
+        Ni_mui = bandit.means[action] * Ni + reward
+        beta = self._get_beta(bandit.n_arm_pulls[self.target], sigma, bandit.n_arms)
+        Ni_muK = (Ni + 1) * (bandit.means[self.target] - 2 * beta)
+        return Ni_mui - Ni_muK
         
     def _get_beta(self, N, sigma, n_arms):
         """
@@ -71,7 +69,6 @@ class EGreedyAttacker(MABAttacker):
             N (int): number of arm pulls of arm i up to round t
             sigma (float): stdev of reward distribution associated with arm i
         """
-
-        outer = (2*sigma**2)/N
-        inner = (np.pi**2)*(n_arms*N**2)/(3*self.delta)
-        return np.sqrt(outer*np.log(inner))
+        outer = (2 * sigma) / N
+        inner = (np.pi ** 2) * (n_arms * N ** 2) / (3 * self.delta)
+        return np.sqrt(outer * np.log(inner))

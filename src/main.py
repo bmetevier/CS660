@@ -18,7 +18,7 @@ def main(task_id):
     #RUN EGREEDY EXPERIMENTS
     n_arms = 2
     delta = 0.05
-    n_rounds = 10**2
+    n_rounds = 10**6
     n_trials = 1#3
 
     target_arm = 1
@@ -32,8 +32,8 @@ def main(task_id):
               "n_jobs": n_jobs, "algo": algo}
               
     UCB_experiment_1(params, repid=task_id)
-    UCB_experiment_2(params, repid=task_id)
-    UCB_experiment_3(params, repid=task_id)
+    # UCB_experiment_2(params, repid=task_id)
+    # UCB_experiment_3(params, repid=task_id)
 
 
     #RUN UCB EXPERIMENTS
