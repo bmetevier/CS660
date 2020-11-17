@@ -68,8 +68,8 @@ def EG_experiment_2(params, plot=False, repid=0):
 
 def EG_experiment_3(params, plot=False, repid=0):
     variances = 0.1 * np.ones(2)
-    means = np.array([0.1,0])
-
+    means = np.array([1,0])
+    params['n_jobs'] = None
     #collect data
     attacks = [True, False]
     data = []
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     #RUN EGREEDY EXPERIMENTS
     n_arms = 2
     delta=0.025
-    n_rounds = 10**7
+    n_rounds = 10**5
     n_trials = 1
     target_arm = 1
     n_jobs = None
@@ -106,7 +106,7 @@ if __name__ == '__main__':
               "n_trials":n_trials, "target":target_arm, 
               "n_jobs": n_jobs, "algo": algo}
 
-    EG_experiment_1(params, repid=task_id)
-    EG_experiment_2(params, repid=task_id)
+    #EG_experiment_1(params, repid=task_id)
+    #EG_experiment_2(params, repid=task_id)
     EG_experiment_3(params, repid=task_id)
     # EG_experiment_3(params)

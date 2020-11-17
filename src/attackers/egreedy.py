@@ -40,7 +40,7 @@ class EGreedyAttacker(MABAttacker):
         if attack_bandit:
             # if bandit.n_arm_pulls.sum() == 2:
             #     print(max(0, self._get_alpha(reward, bandit, sigmas[bandit.action])))
-            self._alpha = max(0, self._get_alpha(reward, bandit, sigmas[bandit.action]))
+            self._alpha = max(0, self._get_alpha(reward, bandit, sigmas[action]))
         else:
             self._alpha = 0
         return reward-self.alpha
