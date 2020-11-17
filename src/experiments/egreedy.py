@@ -50,7 +50,7 @@ def EG_experiment_2(params, plot=False, repid=0, swarm=False):
     for stdev in stdevs:
         sigmas = np.array([stdev, target_stdev])
         print(f"trying sigma={stdev}")
-        data.append(run_bandit(params, mus, sigmas**2, experiment=2))
+        data.append(run_bandit(params, mus, np.sqrt(sigmas), experiment=2))
 
     if swarm:
         if not os.path.exists("/mnt/nfs/scratch1/ktakatsu/egreedy_exp2"):
@@ -111,7 +111,7 @@ if __name__ == '__main__':
 
     #EG_experiment_1(params, repid=task_id)
     #EG_experiment_2(params, repid=task_id)
-    EG_experiment_1(params, repid=task_id, swarm=True)
+    #EG_experiment_1(params, repid=task_id, swarm=True)
     EG_experiment_2(params, repid=task_id, swarm=True)
-    EG_experiment_3(params, repid=task_id, swarm=True)
+    #EG_experiment_3(params, repid=task_id, swarm=True)
     # EG_experiment_3(params)
